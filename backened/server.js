@@ -5,12 +5,10 @@ const seedProducts = require("./src/utils/seedProducts");
 const mongoose = require("mongoose");
 
 const PORT = process.env.PORT || 8007;
-const corsOptions = {
-  origin: '*',
-  credentials: true,            //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-}
-app.use(cors(corsOptions)) // Use this after the variable declaration
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
