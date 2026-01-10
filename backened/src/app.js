@@ -8,12 +8,11 @@ const app = express();
 connectDB();
 
 // middlewares
-app.use("*", cors({
-    origin: true,
+app.use(express.json());
+app.use(cors({
+    origin: true,  // dynamic origin, allows any requesting site
     credentials: true
 }));
-
-app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/products", require("./routes/productRoutes"));
