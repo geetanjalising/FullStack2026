@@ -3,18 +3,10 @@ import "swiper/css";
 import { Autoplay } from "swiper/modules";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Home2 = () => {
-    const [products, setProducts] = useState([]);
-    useEffect(() => {
-        fetch("https://fakestoreapi.com/products")
-            .then(res => res.json())
-            .then(data => {
-                console.log("API data received:", data);
-                setProducts(data);
-            })
-            .catch(err => console.error(err));
-    }, [])
+    const products = useSelector(state => state.products.products);
 
     return (
         <>
