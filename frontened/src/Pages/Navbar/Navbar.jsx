@@ -29,7 +29,7 @@ const Navbar = () => {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    // withCredentials: false
+                    withCredentials: true
                 },
             });
             const data = await res.json();
@@ -46,7 +46,7 @@ const Navbar = () => {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
-                // withCredentials: false
+                withCredentials: true
             },
         });
         const data = await res.json();
