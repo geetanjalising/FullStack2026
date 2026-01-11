@@ -8,8 +8,11 @@ connectDB();
 
 // middlewares
 app.use(cors({
-    origin: true,
-    credentials: true
+    origin: [
+        "http://localhost:5173",
+        "https://shopping2026.netlify.app/"
+    ],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json());
 
