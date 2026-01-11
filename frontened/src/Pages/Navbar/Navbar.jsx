@@ -25,7 +25,13 @@ const Navbar = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const res = await fetch(`${BASE_URL}/products`);
+            const res = await fetch(`${BASE_URL}/products`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    // withCredentials: false
+                },
+            });
             const data = await res.json();
             dispatch(setProducts(data));
         };
@@ -39,7 +45,8 @@ const Navbar = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                // withCredentials: false
             },
         });
         const data = await res.json();
