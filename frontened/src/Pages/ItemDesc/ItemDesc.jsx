@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from "react-router-dom"
+import { NavLink, useParams } from "react-router-dom"
 import { BASE_URL } from "../../helper.js";
+import { ToastContainer, toast } from 'react-toastify';
+import { useDispatch } from "react-redux";
+import { setCheckoutItems } from "../Redux/checkoutSlice";
+import { useNavigate } from "react-router-dom";
 
 const ItemDesc = () => {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [itemDesc, setitemDesc] = useState("");
     const { id } = useParams("");
     const getdata = async () => {
@@ -36,52 +44,80 @@ const ItemDesc = () => {
         });
 
         const data = await res.json();
-        console.log("Add to cart response:", data);
-
         if (!res.ok) {
             alert(data.error || "Failed to add to cart");
             return;
         }
+        toast.success("Item added to cart ", { position: "top-center" });
+
     };
 
+
+
     return (
-        <>
-            <div className='relative top-[60px] w-full h-[100vh]'>
-                {/* {itemDesc && Object.keys(itemDesc).length && */}
-                <div className='w-[95%] m-[0_auto] flex p-[50px_20px]'>
-                    <div className='flex direction-coloumn align-center justify-center'>
-                        <img className='w-[60%] mb-[30px] shadow-[4px_4px_9px_0px]'
-                            src={itemDesc.image}
-                            alt="cart_img" />
+        <div className="min-h-screen bg-gray-100 pt-24 px-4">
+            <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-10">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+
+                    {/* Product Image */}
+                    <div className="flex justify-center">
+                        <div className="bg-gray-50 p-6 rounded-xl shadow-inner">
+                            <img
+                                src={itemDesc.image}
+                                alt={itemDesc.title}
+                                className="w-full max-w-sm object-contain mx-auto hover:scale-105 transition duration-300"
+                            />
+                        </div>
                     </div>
 
-                    <div className='flex-[0.5] p-[20px] rounded-[4px]'>
-                        <h3 className='text-bold text-[23px] mb-[5px]'>{itemDesc.title}</h3>
-                        <p className="mrp">M.R.P. : ₹{itemDesc.price}</p>
+                    {/* Product Info */}
+                    <div className="space-y-5">
 
-                        <p className="description">About the Iteam : <span style={{ color: "#565959", fontSize: "14px", fontWeight: "500", letterSpacing: "0.4px" }}>{itemDesc.description}</span></p>
-                        <button className='cart_btn1' onClick={() => addToCart(itemDesc.id)}>Add to Cart</button>
-                        {/* <div className='cart_btn0'>
-                            {
-                                account ? 
-                                <> <button className='cart_btn1' onClick={() => addtocart(idxdata.id)}>Add to Cart</button>
-                                    <NavLink to="/payment"><button className='cart_btn1'>Buy Now</button></NavLink>
-                                </> :
-                                    <>  <NavLink to="/noaccount"><button className='cart_btn1' >Add to Cart</button></NavLink>
-                                        <NavLink to="/payment"><button className='cart_btn1'>Buy Now</button></NavLink></>
-                            }
+                        <h1 className="text-3xl font-bold text-gray-800 leading-tight">
+                            {itemDesc.title}
+                        </h1>
+
+                        <p className="text-gray-600 leading-relaxed">
+                            <span className="font-semibold text-gray-800">
+                                About the item:
+                            </span>{" "}
+                            {itemDesc.description}
+                        </p>
+
+                        <p className="text-2xl font-semibold text-gray-600">
+                            ${itemDesc.price}
+                        </p>
+                        <button
+                            onClick={() => addToCart(itemDesc.id)}
+                            className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-500 active:scale-95 transition px-8 py-3 rounded-xl font-semibold shadow-md"
+                        >
+                            Add to Cart
+                        </button>
 
 
-                        </div> */}
+                        <button
+                            onClick={() => {
+                                const item = {
+                                    id: itemDesc.id,
+                                    title: itemDesc.title,
+                                    price: itemDesc.price,
+                                    image: itemDesc.image,
+                                    quantity: 1
+                                };
+
+                                dispatch(setCheckoutItems([item])); // 👈 single item
+                                navigate("/checkout");
+                            }}
+                            className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-500 active:scale-95 transition px-8 py-3 rounded-xl font-semibold shadow-md"
+                        >
+                            Buy Now
+                        </button>
                     </div>
                 </div>
-                {/* }
-                {!idxdata ? <div className='circle'>
-                    <CircularProgress />
-                    <h2>Loading...</h2>
-                </div> : ""} */}
+                <ToastContainer />
             </div>
-        </>
-    )
-}
+        </div>
+    );
+};
 export default ItemDesc;

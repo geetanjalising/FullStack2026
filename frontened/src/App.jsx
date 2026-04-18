@@ -10,6 +10,7 @@ import ItemDesc from './Pages/ItemDesc/ItemDesc.jsx'
 import Cart from './Pages/Cart/Cart.jsx'
 import Products from './Pages/Products/Products.jsx'
 import Profile from './Pages/Profile/Profile.jsx'
+import Checkout from './Pages/Checkout/Ckeckout.jsx'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/products" element={<Products />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
       <Footer />
     </>

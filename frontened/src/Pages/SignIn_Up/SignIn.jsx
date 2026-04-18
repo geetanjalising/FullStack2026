@@ -10,90 +10,109 @@ const SignIn = () => {
         password: ""
     });
 
-    const { account, setAccount } = useContext(LoginContext);
+    const { setAccount } = useContext(LoginContext);
 
     const adddata = (e) => {
         const { name, value } = e.target;
-        setuserdata(() => {
-            return {
-                ...userdata,
-                [name]: value
-            }
-        })
+        setuserdata({ ...userdata, [name]: value });
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const { email, password } = userdata;
         const res = await fetch(`${BASE_URL}/auth/login`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                withCredentials: true
-
-            },
-            body: JSON.stringify({
-                email, password
-            })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
         });
+
         const data = await res.json();
+
         if (res.status === 400 || !data) {
-            console.log("invalid details");
-            toast.warn(data.error, {
-                position: "top-center",
-            })
-        }
-        else {
-            setuserdata(data);
+            toast.warn(data.error, { position: "top-center" });
+        } else {
             setAccount(data);
+            toast.success("Login successful", { position: "top-center" });
+
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("loggedIn", true);
+
             setTimeout(() => {
-                toast.success("User valid", {
-                    position: "top-center",
-                })
-            }, 1500);
-
-            window.localStorage.setItem("token", data.token);
-            window.localStorage.setItem("email", userdata.email)
-            window.localStorage.setItem("loggedIn", true);
-            setuserdata({ ...userdata, email: "", password: "" });
-            //   window.location.reload(false);
-
-            window.location.href = "./";
+                window.location.href = "/";
+            }, 1200);
         }
-    }
-    return <>
-        <div className='text-center pt-25 w-full h-[80vh] font-bold bg-cover'>
-            <div className='inline-block mb-[15px] border border-block p-[30px] rounded-[15px]
-            shadow-[3px_3px_3px] bg-[rgba(212,187,156,0.3)] '>
-                <form >
-                    <h1 className="font-[30px] mb-15px">Sign-In</h1>
-                    <div className='mb-3.75 flex justify-between text-[20px] font-bold'>
-                        <label htmlFor='email'>Email: &nbsp; </label>
-                        <input type="text"
-                            onChange={adddata}
+    };
+
+    return (
+        <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 px-4">
+
+            <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+
+                <h2 className="text-2xl font-semibold text-center mb-6">
+                    Sign In
+                </h2>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+
+                    {/* Email */}
+                    <div>
+                        <label className="block text-sm font-medium mb-1">
+                            Email
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
                             value={userdata.email}
-                            name="email" id="email" />
-                    </div>
-                    <div className='mb-3.75 flex justify-between text-[20px] font-bold'>
-                        <label htmlFor="password">Password: &nbsp;</label>
-                        <input type="password"
                             onChange={adddata}
-                            value={userdata.password}
-                            name="password" placeholder='At least 6 char' id="password" />
+                            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
                     </div>
-                    <button className='w-[90px] h-[30px] box-shadow-[2px_2px_2px_rgb(75,74,74)] mt-[9px] rounded-[5px]
-                     cursor-pointer font-bold bg-[rgb(123,227,58)] hover:box-shadow-[3px_3px_4px_rgb(75,74,74)]'
-                        onClick={handleSubmit}
-                    >Sign In</button>
+
+                    {/* Password */}
+                    <div>
+                        <label className="block text-sm font-medium mb-1">
+                            Password
+                        </label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={userdata.password}
+                            onChange={adddata}
+                            placeholder="At least 6 characters"
+                            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
+                    </div>
+
+                    {/* Button */}
+                    <button
+                        type="submit"
+                        className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-lg transition"
+                    >
+                        Sign In
+                    </button>
                 </form>
+
                 <ToastContainer />
-            </div>
-            <div>
-                <p>new To ItSuitsUhh</p>
+
+                {/* Divider */}
+                <div className="my-6 flex items-center gap-3">
+                    <div className="flex-1 h-px bg-gray-300"></div>
+                    <span className="text-sm text-gray-500">New to ItSuitsUhh?</span>
+                    <div className="flex-1 h-px bg-gray-300"></div>
+                </div>
+
+                {/* Create account */}
                 <NavLink to="/signup">
-                    <button className="p-[6px] cursor-pointer rounded-[6px] bg-[rgb(93, 93, 239)]  box-shadow: 2px 2px 2px rgb(75, 74, 74) hover-  box-shadow: 3px 3px 4px rgb(75, 74, 74); ">Create new account</button></NavLink>
+                    <button className="w-full border border-gray-400 py-2 rounded-lg hover:bg-gray-100 transition">
+                        Create new account
+                    </button>
+                </NavLink>
             </div>
         </div>
-    </>
-}
+    );
+};
+
 export default SignIn;

@@ -60,54 +60,98 @@ const Profile = () => {
     if (!user) return <h2>User not found</h2>;
 
     return (
-        <div style={{ maxWidth: "500px", margin: "auto" }}>
-            <h1>User Profile</h1>
+        <div className="min-h-screen bg-gray-100 flex items-start justify-center py-12 px-4">
+            <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-8">
+                <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+                    User Profile
+                </h1>
 
-            <label>Name</label>
-            <input
-                type="text"
-                name="fname"
-                value={formData.fname}
-                onChange={handleChange}
-            />
+                {/* Name */}
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                        Name
+                    </label>
+                    <input
+                        type="text"
+                        name="fname"
+                        value={formData.fname}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
 
-            <label>Email</label>
-            <input
-                type="email"
-                name="email"
-                value={formData.email}
-                disabled
-            />
+                {/* Email */}
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                        Email
+                    </label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        disabled
+                        className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+                    />
+                </div>
 
-            <label>Mobile</label>
-            <input
-                type="text"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-            />
+                {/* Mobile */}
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                        Mobile
+                    </label>
+                    <input
+                        type="text"
+                        name="mobile"
+                        value={formData.mobile}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
 
-            <label>Address</label>
-            <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-            />
+                {/* Address */}
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                        Address
+                    </label>
+                    <input
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
 
-            <label>Pincode</label>
-            <input
-                type="text"
-                name="pincode"
-                value={formData.pincode}
-                onChange={handleChange}
-            />
+                {/* Pincode */}
+                <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">
+                        Pincode
+                    </label>
+                    <input
+                        type="text"
+                        name="pincode"
+                        value={formData.pincode}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
 
-            <button style={{ marginTop: "15px" }}>
-                Update Profile (API later)
-            </button>
+                {/* Button */}
+                <button
+                    className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 transition duration-200"
+                >
+                    Update Profile (API later)
+                </button>
+                <br />
+                <button
+                    className="w-full mt-4 bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 transition duration-200"
+                >
+                    View All Users Data
+                </button>
+            </div>
         </div>
     );
+
 };
 
 export default Profile;

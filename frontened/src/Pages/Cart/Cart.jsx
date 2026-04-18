@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { BASE_URL } from "../../helper.js";
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setCheckoutItems } from "../Redux/checkoutSlice";
 
 const Cart = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [cartdata, setCartdata] = useState([]);
     const getCartItems = async () => {
         const res = await fetch(`${BASE_URL}/cart/`, {
@@ -77,43 +83,103 @@ const Cart = () => {
         });
     };
 
+    const totalSum = cartdata.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+    );
+
     return (
-        <>
-            <div className='w-full min-height-[100vh] t-60px pt-50px bg-[#EAEDED!important'>
-                <div className='m-0_auto p-[40px_20px] flex mb-[100px]'>
-                    {/* media query */}
-                    <div className='flex-[0.7] bg-amber-50 p-[10px_20px] rounded-[2px]'>
-                        <h1 className='font-[500] text-28px'>Shopping Cart</h1>
+        <div className="min-h-screen bg-gray-100 pt-20 px-4">
+            <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-md p-6">
 
-                        {
-                            cartdata.map((e, k) => {   //travsersing cart data
-                                return (
-                                    <>
-                                        <div className='p-[10px_5px_20px_15px] grid  grid-template-columns:.8fr 2fr .1fr}' key={k}>
-                                            <img src={e.image} alt="imgitem" />
-                                            <div >
-                                                <h3>{e.title}</h3>
-                                                <h3>{e.description}</h3>
-                                                <h3>₹{e.price * e.quantity}.00</h3>
+                <h1 className="text-2xl font-semibold mb-6">Shopping Cart</h1>
 
-                                                <button type="button" onClick={incQty(e.id)}>+</button>
-                                                Quantity: {e.quantity}
-                                                <button type="button" onClick={decQty(e.id)}>-</button>
+                {cartdata.length === 0 ? (
+                    <p className="text-center text-gray-500">Your cart is empty</p>
+                ) : (
+                    <div className="space-y-6">
+                        {cartdata.map((e) => (
+                            <div
+                                key={e.id}
+                                className="flex flex-col md:flex-row gap-6 border-b pb-6"
+                            >
+                                {/* Product Image */}
+                                <img
+                                    src={e.image}
+                                    alt={e.title}
+                                    className="w-full md:w-40 h-40 object-contain rounded"
+                                />
 
-                                                <button type="button" onClick={removeCartItem(e.id)}>Delete</button>
-                                            </div>
-                                        </div>
-                                    </>
-                                )
-                            })
+                                {/* Product Info */}
+                                <div className="flex-1">
+                                    <h3 className="font-semibold text-lg">
+                                        {e.title}
+                                    </h3>
+                                    <p className="text-sm text-gray-600 line-clamp-2">
+                                        {e.description}
+                                    </p>
 
-                        }
+                                    <p className="mt-2 font-semibold">
+                                        ₹{e.price * e.quantity}.00
+                                    </p>
 
+                                    {/* Quantity Controls */}
+                                    <div className="flex items-center gap-3 mt-4">
+                                        <button
+                                            onClick={decQty(e.id)}
+                                            disabled={e.quantity === 1}
+                                            className="px-3 py-1 border rounded hover:bg-gray-100"
+                                        >
+                                            −
+                                        </button>
+
+                                        <span className="font-medium">
+                                            {e.quantity}
+                                        </span>
+
+                                        <button
+                                            onClick={incQty(e.id)}
+                                            className="px-3 py-1 border rounded hover:bg-gray-100"
+                                        >
+                                            +
+                                        </button>
+
+                                        <button
+                                            onClick={removeCartItem(e.id)}
+                                            className="ml-6 text-red-500 hover:underline"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
+                )}
+
+                <div className="mt-6 text-right">
+                    <p className="text-lg font-semibold">
+                        Total: ₹{totalSum}.00
+                    </p>
                 </div>
+                {/* Checkout */}
+                {cartdata.length > 0 && (
+                    <div className="mt-8 flex justify-end">
+                        <button
+                            onClick={() => {
+                                dispatch(setCheckoutItems(cartdata));
+                                navigate("/checkout"); // 👈 AFTER dispatch
+                            }}
+                            className="bg-yellow-400 px-6 py-2 rounded"
+                        >
+                            Proceed to Checkout
+                        </button>
+                    </div>
+                )}
             </div>
-        </>
-    )
+        </div>
+    );
+
 }
 
 export default Cart;
