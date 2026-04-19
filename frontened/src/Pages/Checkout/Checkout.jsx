@@ -1,43 +1,37 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { clearCheckout } from "../Redux/checkoutSlice";
+import { useEffect } from 'react';
+import { BASE_URL } from "../../helper.js";
 
 export default function Checkout() {
-    const dispatch = useDispatch();
+    const [checkoutItems, setCheckoutItems] = useState([]);
+    const getCheckoutItems = async () => {
+        const res = await fetch(`${BASE_URL}/cart/`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            },
+        });
+        const data = await res.json();
+        setCheckoutItems(data);
+        console.log("Cart data fetched:", data);
+    }
 
-    // ✅ Get checkout items from Redux
-    const checkoutItems = useSelector(state => state.checkout.items);
+    useEffect(() => {
+        getCheckoutItems();
+    }, []);
+
 
     // ✅ Calculate total
     const totalSum = checkoutItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
     );
-
-    // ✅ Address State
-    const [address, setAddress] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        city: "",
-        addressLine: "",
-    });
-
     const [loading, setLoading] = useState(false);
-
-    const handleChange = (e) => {
-        setAddress({ ...address, [e.target.name]: e.target.value });
-    };
-
     // ✅ Place Order Handler (for now mock)
     const handlePlaceOrder = async () => {
-        if (!address.name || !address.phone || !address.addressLine) {
-            alert("Please fill required fields");
-            return;
-        }
-
         setLoading(true);
-
         try {
             // 👉 Later replace with Razorpay integration
             console.log("Order Data:", {
@@ -47,14 +41,10 @@ export default function Checkout() {
             });
 
             alert("Order placed successfully!");
-
-            dispatch(clearCheckout()); // clear after success
-
         } catch (err) {
             console.error(err);
             alert("Payment failed");
         }
-
         setLoading(false);
     };
 
@@ -72,57 +62,6 @@ export default function Checkout() {
     return (
         <div className="min-h-screen bg-gray-100 pt-24 px-4">
             <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
-
-                {/* LEFT: Address */}
-                <div className="bg-white p-6 rounded-2xl shadow">
-                    <h2 className="text-xl font-semibold mb-4">
-                        Shipping Details
-                    </h2>
-
-                    <div className="space-y-4">
-                        <input
-                            name="name"
-                            placeholder="Full Name"
-                            value={address.name}
-                            onChange={handleChange}
-                            className="w-full border px-4 py-2 rounded-lg"
-                        />
-
-                        <input
-                            name="email"
-                            placeholder="Email"
-                            value={address.email}
-                            onChange={handleChange}
-                            className="w-full border px-4 py-2 rounded-lg"
-                        />
-
-                        <input
-                            name="phone"
-                            placeholder="Phone"
-                            value={address.phone}
-                            onChange={handleChange}
-                            className="w-full border px-4 py-2 rounded-lg"
-                        />
-
-                        <input
-                            name="city"
-                            placeholder="City"
-                            value={address.city}
-                            onChange={handleChange}
-                            className="w-full border px-4 py-2 rounded-lg"
-                        />
-
-                        <textarea
-                            name="addressLine"
-                            placeholder="Full Address"
-                            value={address.addressLine}
-                            onChange={handleChange}
-                            className="w-full border px-4 py-2 rounded-lg"
-                        />
-                    </div>
-                </div>
-
-                {/* RIGHT: Order Summary */}
                 <div className="bg-white p-6 rounded-2xl shadow flex flex-col">
 
                     <h2 className="text-xl font-semibold mb-4">

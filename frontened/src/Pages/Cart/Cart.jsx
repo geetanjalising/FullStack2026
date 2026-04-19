@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { setCheckoutItems } from "../Redux/checkoutSlice";
 
 const Cart = () => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [cartdata, setCartdata] = useState([]);
@@ -39,7 +39,7 @@ const Cart = () => {
         if (res.status === 200) {
             console.log("Item removed from cart:", id);
             getCartItems();
-            dispatch(removeItem(id));
+            //    dispatch(removeItem(id));
         } else {
             console.error("Failed to remove item from cart:", id);
         }
@@ -55,7 +55,7 @@ const Cart = () => {
             )
         );
 
-        dispatch(increaseQty(productId));
+        // dispatch(increaseQty(productId));
         await fetch(`${BASE_URL}/cart/increaseQty/${productId}`, {
             method: "PATCH",
             headers: {
@@ -73,7 +73,7 @@ const Cart = () => {
                     : item
             )
         );
-        dispatch(decreaseQty(productId));
+        //    dispatch(decreaseQty(productId));
         await fetch(`${BASE_URL}/cart/decreaseQty/${productId}`, {
             method: "PATCH",
             headers: {
@@ -167,8 +167,7 @@ const Cart = () => {
                     <div className="mt-8 flex justify-end">
                         <button
                             onClick={() => {
-                                dispatch(setCheckoutItems(cartdata));
-                                navigate("/checkout"); // 👈 AFTER dispatch
+                                navigate("/checkout");
                             }}
                             className="bg-yellow-400 px-6 py-2 rounded"
                         >

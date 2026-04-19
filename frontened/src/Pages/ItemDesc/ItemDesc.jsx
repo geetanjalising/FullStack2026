@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const ItemDesc = () => {
 
-    const dispatch = useDispatch();
+    //  const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [itemDesc, setitemDesc] = useState("");
@@ -106,7 +106,6 @@ const ItemDesc = () => {
                                     quantity: 1
                                 };
 
-                                dispatch(setCheckoutItems([item])); // 👈 single item
                                 navigate("/checkout");
                             }}
                             className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-500 active:scale-95 transition px-8 py-3 rounded-xl font-semibold shadow-md"

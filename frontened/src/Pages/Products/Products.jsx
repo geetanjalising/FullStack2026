@@ -8,43 +8,23 @@ const Products = () => {
     useEffect(() => {
         setFilteredProducts(products);
     }, [products]);
-    // const [loading, setLoading] = useState(true);
 
-    // Filters
     const [filters, setFilters] = useState({
         category: "",
         rating: false,
         price: ""
     });
 
-    // Sorting
     const [sortBy, setSortBy] = useState("");
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
 
-    // useEffect(() => {
-    //     fetchProducts();
-    // }, []);
-
     useEffect(() => {
         applyFiltersAndSort();
         setCurrentPage(1); // reset page on filter/sort change
     }, [products, filters, sortBy]);
-
-    // const fetchProducts = async () => {
-    //     try {
-    //         const res = await fetch(`${BASE_URL}/products`);
-    //         const data = await res.json();
-    //         setProducts(data);
-    //         setFilteredProducts(data);
-    //     } catch (error) {
-    //         console.error("Error fetching products:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
 
     const applyFiltersAndSort = () => {
         let updated = [...products];
@@ -98,10 +78,6 @@ const Products = () => {
         startIndex,
         startIndex + itemsPerPage
     );
-
-    // if (loading) {
-    //     return <h2>Loading products...</h2>;
-    // }
 
     return (
         <div style={{ padding: "20px" }}>

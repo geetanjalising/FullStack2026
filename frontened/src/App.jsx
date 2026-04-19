@@ -10,7 +10,7 @@ import ItemDesc from './Pages/ItemDesc/ItemDesc.jsx'
 import Cart from './Pages/Cart/Cart.jsx'
 import Products from './Pages/Products/Products.jsx'
 import Profile from './Pages/Profile/Profile.jsx'
-import Checkout from './Pages/Checkout/Ckeckout.jsx'
+import Checkout from './Pages/Checkout/Checkout.jsx'
 
 function App() {
   return (
