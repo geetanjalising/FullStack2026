@@ -176,7 +176,9 @@ const Navbar = () => {
                                 <NavLink to="/profile" className="block mt-4">
                                     👤 {account.fname}
                                 </NavLink>
-
+                                <NavLink to={`/orders/${account._id}`} className='block mt-4 text-black'>
+                                    My Orders
+                                </NavLink>
                                 <button
                                     onClick={logoutuser}
                                     className="block mt-4 text-red-500"

@@ -96,22 +96,14 @@ const ItemDesc = () => {
                         </button>
 
 
-                        <button
+                        {/* <button
                             onClick={() => {
-                                const item = {
-                                    id: itemDesc.id,
-                                    title: itemDesc.title,
-                                    price: itemDesc.price,
-                                    image: itemDesc.image,
-                                    quantity: 1
-                                };
-
                                 navigate("/checkout");
                             }}
                             className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-500 active:scale-95 transition px-8 py-3 rounded-xl font-semibold shadow-md"
                         >
                             Buy Now
-                        </button>
+                        </button> */}
                     </div>
                 </div>
                 <ToastContainer />

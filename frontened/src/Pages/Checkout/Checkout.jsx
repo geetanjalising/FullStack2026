@@ -2,8 +2,11 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from 'react';
 import { BASE_URL } from "../../helper.js";
+import { LoginContext } from '../Context/ContextProvider'
+import { useContext } from "react";
 
 export default function Checkout() {
+    const { account, setAccount } = useContext(LoginContext);
     const [checkoutItems, setCheckoutItems] = useState([]);
     const getCheckoutItems = async () => {
         const res = await fetch(`${BASE_URL}/cart/`, {
@@ -15,7 +18,6 @@ export default function Checkout() {
         });
         const data = await res.json();
         setCheckoutItems(data);
-        console.log("Cart data fetched:", data);
     }
 
     useEffect(() => {
@@ -31,21 +33,71 @@ export default function Checkout() {
     const [loading, setLoading] = useState(false);
     // ✅ Place Order Handler (for now mock)
     const handlePlaceOrder = async () => {
-        setLoading(true);
         try {
-            // 👉 Later replace with Razorpay integration
-            console.log("Order Data:", {
-                items: checkoutItems,
-                total: totalSum,
-                address
+            // 1️⃣ Call backend to create order
+            const res = await fetch(`${BASE_URL}/payment/create-order`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ amount: totalSum })
             });
 
-            alert("Order placed successfully!");
+            const data = await res.json();
+            console.log("Order created:", data); // Debug log
+            // 2️⃣ Razorpay options
+            const options = {
+                key: "rzp_test_SfID21calHIw4T", // from Razorpay dashboard
+                amount: data.amount,
+                currency: data.currency,
+                name: "Shopping App",
+                description: "Test Transaction",
+                order_id: data.id,
+
+                handler: async function (response) {
+                    console.log("Payment Success:", response);
+                    const verifyRes = await fetch(`${BASE_URL}/payment/verify`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            ...response,
+                            checkoutItems,
+                            totalSum,
+                            userId: account._id
+                        })
+                    });
+
+                    const result = await verifyRes.json();
+
+                    if (result.success) {
+                        alert("Order Placed Successfully!");
+                    } else {
+                        alert("Payment verification failed!");
+                    }
+                    alert("Payment Successful!");
+                },
+
+                prefill: {
+                    name: account.fname,
+                    email: account.email,
+                    contact: account.phone
+                },
+
+                theme: {
+                    color: "#000"
+                }
+            };
+
+            // 3️⃣ Open Razorpay popup
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+
         } catch (err) {
             console.error(err);
-            alert("Payment failed");
+            alert("Error in payment");
         }
-        setLoading(false);
     };
 
     // ❗ Safety check
@@ -100,20 +152,6 @@ export default function Checkout() {
                         <span>₹{totalSum}</span>
                     </div>
 
-                    {/* Payment Options */}
-                    <div className="mt-6 space-y-2">
-                        <p className="font-medium">Payment Method</p>
-
-                        <label className="flex items-center gap-2">
-                            <input type="radio" defaultChecked />
-                            UPI / Card / Net Banking
-                        </label>
-
-                        <label className="flex items-center gap-2">
-                            <input type="radio" />
-                            Cash on Delivery
-                        </label>
-                    </div>
 
                     {/* Button */}
                     <button

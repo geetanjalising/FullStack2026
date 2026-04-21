@@ -83,13 +83,11 @@ exports.removeFromCart = async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-        console.log("left iteamsfg", user.carts, productId);
         user.carts = user.carts.filter(item => item.productId !== productId);
         await user.save();
 
         res.status(200).json({ message: "Product removed from cart", carts: user.carts });
     } catch (error) {
-        console.error("Remove from cart error:", error);
         res.status(500).json({ error: "Failed to remove from cart" });
     }
 };

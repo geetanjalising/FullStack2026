@@ -11,6 +11,7 @@ import Cart from './Pages/Cart/Cart.jsx'
 import Products from './Pages/Products/Products.jsx'
 import Profile from './Pages/Profile/Profile.jsx'
 import Checkout from './Pages/Checkout/Checkout.jsx'
+import Orders from './Pages/Orders/Orders.jsx'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders/:id" element={<Orders />} />
       </Routes>
       <Footer />
     </>

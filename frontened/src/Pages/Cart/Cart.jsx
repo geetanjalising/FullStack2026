@@ -20,7 +20,6 @@ const Cart = () => {
         });
         const data = await res.json();
         setCartdata(data);
-        console.log("Cart data fetched:", data);
     }
 
     useEffect(() => {
@@ -28,7 +27,6 @@ const Cart = () => {
     }, []);
 
     const removeCartItem = (id) => async () => {
-        console.log("Removing item from cart:", id);
         const res = await fetch(`${BASE_URL}/cart/${id}`, {
             method: "DELETE",
             headers: {
@@ -37,7 +35,6 @@ const Cart = () => {
             },
         });
         if (res.status === 200) {
-            console.log("Item removed from cart:", id);
             getCartItems();
             //    dispatch(removeItem(id));
         } else {
