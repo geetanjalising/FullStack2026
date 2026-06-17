@@ -48,3 +48,29 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 }
+
+// PUT /users/update
+exports.updateUser = async (req, res) => {
+    try {
+        const { fname, mobile, address, pincode } = req.body;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user.id,
+            {
+                fname,
+                mobile,
+                address,
+                pincode
+            },
+            { new: true }
+        );
+
+        res.json({
+            message: "Profile updated",
+            user: updatedUser
+        });
+
+    } catch (err) {
+        res.status(500).json({ message: "Update failed" });
+    }
+};

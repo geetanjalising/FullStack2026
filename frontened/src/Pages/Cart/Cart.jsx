@@ -3,7 +3,6 @@ import { BASE_URL } from "../../helper.js";
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setCheckoutItems } from "../Redux/checkoutSlice";
 
 const Cart = () => {
     // const dispatch = useDispatch();

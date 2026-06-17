@@ -12,6 +12,10 @@ import Products from './Pages/Products/Products.jsx'
 import Profile from './Pages/Profile/Profile.jsx'
 import Checkout from './Pages/Checkout/Checkout.jsx'
 import Orders from './Pages/Orders/Orders.jsx'
+import AllUsers from './Pages/Profile/AllUsersProfile.jsx'
+import ForgotPassword from './Pages/SignIn_Up/Password/ForgotPassword.jsx'
+import ResetPassword from './Pages/SignIn_Up/Password/ResetPassword.jsx'
+import ProtectedRoute from './ProtectedRoute.jsx'
 
 function App() {
   return (
@@ -22,11 +26,14 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/products/:id" element={<ItemDesc />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
         <Route path="/products" element={<Products />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/orders/:id" element={<Orders />} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+        <Route path="/orders/:id" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+        <Route path="/all-users" element={<AllUsers />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
       <Footer />
     </>

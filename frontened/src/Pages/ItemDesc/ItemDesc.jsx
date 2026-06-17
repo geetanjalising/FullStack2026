@@ -3,7 +3,6 @@ import { NavLink, useParams } from "react-router-dom"
 import { BASE_URL } from "../../helper.js";
 import { ToastContainer, toast } from 'react-toastify';
 import { useDispatch } from "react-redux";
-import { setCheckoutItems } from "../Redux/checkoutSlice";
 import { useNavigate } from "react-router-dom";
 
 const ItemDesc = () => {
@@ -45,7 +44,7 @@ const ItemDesc = () => {
 
         const data = await res.json();
         if (!res.ok) {
-            alert(data.error || "Failed to add to cart");
+            navigate("/signin");
             return;
         }
         toast.success("Item added to cart ", { position: "top-center" });

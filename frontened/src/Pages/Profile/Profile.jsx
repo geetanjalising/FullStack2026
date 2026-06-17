@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../../helper";
-
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import {
+    NavLink
+} from "react-router-dom";
 const Profile = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const isAdmin = user?.role === "admin";
+    const navigate = useNavigate();
 
-    // For editable form
     const [formData, setFormData] = useState({
         fname: "",
         email: "",
@@ -30,7 +35,6 @@ const Profile = () => {
 
             const data = await res.json();
             setUser(data);
-
             setFormData({
                 fname: data.fname || "",
                 email: data.email || "",
@@ -45,7 +49,6 @@ const Profile = () => {
         }
     };
 
-    // 👇 THIS IS THE IMPORTANT PART YOU ASKED ABOUT
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -55,8 +58,33 @@ const Profile = () => {
         }));
     };
 
-    if (loading) return <h2>Loading profile...</h2>;
+    // ✅ UPDATE PROFILE FUNCTION
+    const handleUpdate = async () => {
+        try {
+            const res = await fetch(`${BASE_URL}/users/update`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify(formData)
+            });
 
+            const data = await res.json();
+
+            if (res.ok) {
+                toast.success("Profile updated successfully", { position: "top-center" });
+                fetchUserProfile(); // refresh data
+            } else {
+                toast.warn(data.message || "Update failed", { position: "top-center" });
+            }
+        } catch (error) {
+            console.error("Update error:", error);
+            alert("Something went wrong");
+        }
+    };
+
+    if (loading) return <h2>Loading profile...</h2>;
     if (!user) return <h2>User not found</h2>;
 
     return (
@@ -76,7 +104,7 @@ const Profile = () => {
                         name="fname"
                         value={formData.fname}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border rounded-lg"
                     />
                 </div>
 
@@ -90,7 +118,7 @@ const Profile = () => {
                         name="email"
                         value={formData.email}
                         disabled
-                        className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+                        className="w-full px-4 py-2 border rounded-lg bg-gray-100"
                     />
                 </div>
 
@@ -104,7 +132,7 @@ const Profile = () => {
                         name="mobile"
                         value={formData.mobile}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border rounded-lg"
                     />
                 </div>
 
@@ -118,7 +146,7 @@ const Profile = () => {
                         name="address"
                         value={formData.address}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border rounded-lg"
                     />
                 </div>
 
@@ -132,26 +160,35 @@ const Profile = () => {
                         name="pincode"
                         value={formData.pincode}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border rounded-lg"
                     />
                 </div>
 
-                {/* Button */}
+                {/* ✅ UPDATE BUTTON */}
                 <button
-                    className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 transition duration-200"
+                    onClick={handleUpdate}
+                    className="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700"
                 >
-                    Update Profile (API later)
+                    Update Profile
                 </button>
-                <br />
-                <button
-                    className="w-full mt-4 bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 transition duration-200"
-                >
-                    View All Users Data
-                </button>
+
+                <NavLink to={`/orders/${user._id}`}>
+                    <button className="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 mt-4"> My Orders</button>
+                </NavLink>
+
+                {/* ✅ ADMIN ONLY BUTTON */}
+                {isAdmin && (
+                    <button
+                        onClick={() => navigate("/all-users")}
+                        className="w-full mt-4 bg-green-600 text-white py-2.5 rounded-lg hover:bg-green-700"
+                    >
+                        View All Users Data
+                    </button>
+                )}
             </div>
+            <ToastContainer />
         </div>
     );
-
 };
 
 export default Profile;

@@ -86,6 +86,15 @@ const SignIn = () => {
                         />
                     </div>
 
+                    <div className="flex justify-end">
+                        <NavLink
+                            to="/forgot-password"
+                            className="text-sm text-blue-500 hover:underline"
+                        >
+                            Forgot Password?
+                        </NavLink>
+                    </div>
+
                     {/* Button */}
                     <button
                         type="submit"
