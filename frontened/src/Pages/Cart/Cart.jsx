@@ -7,7 +7,7 @@ import {
     removeItem,
     increaseQuantity,
     decreaseQuantity
-} from "../redux/cartSlice";
+} from "../Redux/cartSlice";
 
 const Cart = () => {
 
