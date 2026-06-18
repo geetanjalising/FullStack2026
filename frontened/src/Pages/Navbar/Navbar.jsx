@@ -11,6 +11,7 @@ import { LoginContext } from '../Context/ContextProvider'
 import { BASE_URL } from '../../helper.js'
 import { useDispatch, useSelector } from "react-redux"
 import { setProducts } from "../Redux/productSlice"
+import { setCart } from "../Redux/cartSlice"
 
 const Navbar = () => {
     const { account, setAccount } = useContext(LoginContext)
@@ -20,6 +21,7 @@ const Navbar = () => {
 
     const dispatch = useDispatch()
     const products = useSelector(state => state.products.products)
+    const cart = useSelector(state => state.cart.items);
 
     const getText = (val) => {
         setText(val)
@@ -35,6 +37,7 @@ const Navbar = () => {
         fetchProducts()
     }, [dispatch])
 
+
     const getdetailvaliduser = async () => {
         const res = await fetch(`${BASE_URL}/users/validUser`, {
             method: "POST",
@@ -44,11 +47,28 @@ const Navbar = () => {
             }
         })
         const data = await res.json()
-        if (res.status === 200) setAccount(data.user)
+        if (res.status === 200) {
+            setAccount(data.user);
+            console.log("User data:", data.user);
+            const cartRes = await fetch(
+                `${BASE_URL}/cart/`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                }
+            );
+
+            const cartData = await cartRes.json();
+            console.log("Cart data:", cartData);
+            dispatch(setCart(cartData));
+        }
     }
 
     useEffect(() => {
-        getdetailvaliduser()
+        getdetailvaliduser();
     }, [])
 
     const logoutuser = () => {
@@ -121,7 +141,7 @@ const Navbar = () => {
                         {!account && <NavLink to="/signin">Sign In</NavLink>}
 
                         <NavLink to="/cart">
-                            <Badge badgeContent={account?.carts?.length || 0} color="primary">
+                            <Badge badgeContent={cart?.length || 0} color="primary">
                                 <ShoppingCartIcon />
                             </Badge>
                         </NavLink>
@@ -168,7 +188,7 @@ const Navbar = () => {
                         )}
 
                         <NavLink to="/cart" className="block mt-4">
-                            Cart ({account?.carts?.length || 0})
+                            Cart ({cart?.length || 0})
                         </NavLink>
 
                         {account && (

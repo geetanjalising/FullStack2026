@@ -4,11 +4,13 @@ import { BASE_URL } from "../../helper.js";
 import { ToastContainer, toast } from 'react-toastify';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { addToCart as addToCartAction, removeItem } from "../Redux/cartSlice";
 
 const ItemDesc = () => {
 
-    //  const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+
 
     const [itemDesc, setitemDesc] = useState("");
     const { id } = useParams("");
@@ -34,6 +36,7 @@ const ItemDesc = () => {
 
     const addToCart = async (id) => {
         console.log("Adding to cart:", id);
+        dispatch(addToCartAction(itemDesc));
         const res = await fetch(`${BASE_URL}/cart/${id}`, {
             method: "POST",
             headers: {
@@ -45,6 +48,7 @@ const ItemDesc = () => {
         const data = await res.json();
         if (!res.ok) {
             navigate("/signin");
+            dispatch(removeItem(itemDesc.id));
             return;
         }
         toast.success("Item added to cart ", { position: "top-center" });
