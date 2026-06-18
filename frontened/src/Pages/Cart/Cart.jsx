@@ -108,29 +108,22 @@ const Cart = () => {
                                 key={e.id}
                                 className="flex flex-col md:flex-row gap-6 border-b pb-6"
                             >
-
                                 <img
                                     src={e.image}
                                     alt={e.title}
                                     className="w-full md:w-40 h-40 object-contain rounded"
                                 />
-
                                 <div className="flex-1">
-
                                     <h3 className="font-semibold text-lg">
                                         {e.title}
                                     </h3>
-
                                     <p className="text-sm text-gray-600 line-clamp-2">
                                         {e.description}
                                     </p>
-
                                     <p className="mt-2 font-semibold">
                                         ₹{e.price * e.quantity}.00
                                     </p>
-
                                     <div className="flex items-center gap-3 mt-4">
-
                                         <button
                                             onClick={decQty(e.id)}
                                             disabled={e.quantity === 1}
@@ -138,59 +131,42 @@ const Cart = () => {
                                         >
                                             −
                                         </button>
-
                                         <span className="font-medium">
                                             {e.quantity}
                                         </span>
-
                                         <button
                                             onClick={incQty(e.id)}
                                             className="px-3 py-1 border rounded hover:bg-gray-100"
                                         >
                                             +
                                         </button>
-
                                         <button
                                             onClick={removeCartItem(e.id)}
                                             className="ml-6 text-red-500 hover:underline"
                                         >
                                             Delete
                                         </button>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         ))}
-
                     </div>
                 )}
-
                 <div className="mt-6 text-right">
-
                     <p className="text-lg font-semibold">
                         Total: ₹{totalSum}.00
                     </p>
-
                 </div>
-
                 {cartItems.length > 0 && (
-
                     <div className="mt-8 flex justify-end">
-
                         <button
                             onClick={() => navigate("/checkout")}
                             className="bg-yellow-400 px-6 py-2 rounded"
                         >
                             Proceed to Checkout
                         </button>
-
                     </div>
-
                 )}
-
             </div>
         </div>
     );
