@@ -16,7 +16,7 @@ import AllUsers from './Pages/Profile/AllUsersProfile.jsx'
 import ForgotPassword from './Pages/SignIn_Up/Password/ForgotPassword.jsx'
 import ResetPassword from './Pages/SignIn_Up/Password/ResetPassword.jsx'
 import AddProduct from './Pages/Products/Addproduct.jsx'
-import ManageProducts from './Pages/Products/ManageProducts.jsx'
+import ManageProducts from './Pages/Products/Manageproducts.jsx'
 import EditProduct from './Pages/Products/Editproduct.jsx'
 import ProtectedRoute from './ProtectedRoute.jsx'
 

@@ -94,23 +94,30 @@ const Profile = () => {
                     User Profile
                 </h1>
                 {
-                    isAdmin && (<div className="flex justify-center mb-6">
+                    isAdmin && (<div className="flex justify-center mb-6 gap-2">
                         <button
                             onClick={() => navigate("/add-product")}
                             className="bg-green-600 text-white px-5 py-3 rounded-lg hover:bg-green-700 transition"
                         >
                             + Add Product
                         </button>
+                        <button
+                            onClick={() => navigate("/manage-products")}
+                            className="bg-green-600 text-white px-5 py-3 rounded-lg hover:bg-green-700 transition"
+                        >
+                            Manage Products
+                        </button>
                     </div>)
                 }
-                {isAdmin && (
+                {/* {isAdmin && (<div className="flex justify-center mb-6">
                     <button
                         onClick={() => navigate("/manage-products")}
-                        className="w-full mt-4 bg-purple-600 text-white py-2.5 rounded-lg hover:bg-purple-700"
+                        className="bg-green-600 text-white px-5 py-3 rounded-lg hover:bg-green-700 transition"
                     >
                         Manage Products
                     </button>
-                )}
+                </div>)
+                } */}
 
                 {/* Name */}
                 <div className="mb-4">
