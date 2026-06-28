@@ -15,6 +15,9 @@ import Orders from './Pages/Orders/Orders.jsx'
 import AllUsers from './Pages/Profile/AllUsersProfile.jsx'
 import ForgotPassword from './Pages/SignIn_Up/Password/ForgotPassword.jsx'
 import ResetPassword from './Pages/SignIn_Up/Password/ResetPassword.jsx'
+import AddProduct from './Pages/Products/Addproduct.jsx'
+import ManageProducts from './Pages/Products/ManageProducts.jsx'
+import EditProduct from './Pages/Products/Editproduct.jsx'
 import ProtectedRoute from './ProtectedRoute.jsx'
 
 function App() {
@@ -34,6 +37,9 @@ function App() {
         <Route path="/all-users" element={<AllUsers />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/add-product" element={<AddProduct />} />
+        <Route path="/manage-products" element={<ManageProducts />} />
+        <Route path="/edit-product/:id" element={<EditProduct />} />
       </Routes>
       <Footer />
     </>

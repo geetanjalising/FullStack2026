@@ -93,6 +93,24 @@ const Profile = () => {
                 <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
                     User Profile
                 </h1>
+                {
+                    isAdmin && (<div className="flex justify-center mb-6">
+                        <button
+                            onClick={() => navigate("/add-product")}
+                            className="bg-green-600 text-white px-5 py-3 rounded-lg hover:bg-green-700 transition"
+                        >
+                            + Add Product
+                        </button>
+                    </div>)
+                }
+                {isAdmin && (
+                    <button
+                        onClick={() => navigate("/manage-products")}
+                        className="w-full mt-4 bg-purple-600 text-white py-2.5 rounded-lg hover:bg-purple-700"
+                    >
+                        Manage Products
+                    </button>
+                )}
 
                 {/* Name */}
                 <div className="mb-4">
