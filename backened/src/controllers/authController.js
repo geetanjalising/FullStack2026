@@ -89,9 +89,9 @@ exports.login = async (req, res) => {
 
 
 exports.forgotPassword = async (req, res) => {
-    console.log("wertyhujiugfc ggj", req);
     try {
         const { email } = req.body;
+        console.log("📧 Forgot password request for:", email);
 
         if (!email) {
             return res.status(400).json({ error: "Email is required" });
@@ -106,15 +106,13 @@ exports.forgotPassword = async (req, res) => {
 
         // Generate token
         const resetToken = crypto.randomBytes(32).toString("hex");
-
         user.resetPasswordToken = resetToken;
         user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 min
-
         await user.save();
-
+        console.log("✅ Token saved for user:", user.email);
 
         const resetURL = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
-
+        console.log("🔗 Reset URL:", resetURL);
         const message = `
 <!DOCTYPE html>
 <html>
@@ -175,7 +173,7 @@ exports.forgotPassword = async (req, res) => {
         res.json({ message: "Reset link sent to email" });
 
     } catch (err) {
-        console.error(err);
+        console.error("❌ Forgot password error:", err.message);
         res.status(500).json({ error: "Server error" });
     }
 };
