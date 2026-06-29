@@ -4,10 +4,11 @@ import { toast, ToastContainer } from "react-toastify";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setLoading(true);
         try {
             const res = await fetch(`${BASE_URL}/auth/forgot-password`, {
                 method: "POST",
@@ -26,6 +27,8 @@ const ForgotPassword = () => {
             }
         } catch (err) {
             toast.error("Something went wrong");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -47,8 +50,8 @@ const ForgotPassword = () => {
                         className="w-full border px-3 py-2 rounded-lg"
                     />
 
-                    <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
-                        Send Reset Link
+                    <button disabled={loading} className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:opacity-60">
+                        {loading ? "Sending..." : "Send Reset Link"}
                     </button>
                 </form>
 

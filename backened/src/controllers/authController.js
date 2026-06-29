@@ -89,6 +89,7 @@ exports.login = async (req, res) => {
 
 
 exports.forgotPassword = async (req, res) => {
+    console.log("wertyhujiugfc ggj", req);
     try {
         const { email } = req.body;
 
