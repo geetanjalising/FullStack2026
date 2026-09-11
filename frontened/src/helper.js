@@ -1,6 +1,10 @@
 export const BASE_URL = "https://fullstack2026.onrender.com/api";
 //export const BASE_URL = "http://localhost:8007/api";
-//export const BASE_URL = "http://3.27.170.4:8007/api";
+//export const BASE_URL = "http://3.27.170.4:8007/api";  //currently removing this because cor issue, netlify is on https and ec2 url is on http thas why getting issue, to solve this we need to add
+// HTTPS
+// Nginx
+// Domain
+// GitHub Actions
 // Now whenever push new code for backened do this 
 // Your deployment workflow from now on
 

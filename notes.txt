@@ -1,0 +1,332 @@
+.
+
+🚀 AWS EC2 + Docker Backend Deployment Revision
+Goal
+
+Deploy a Dockerized Node.js backend on AWS EC2 and make it publicly accessible.
+
+Phase 1 — Create the EC2 Server
+1. Launch an EC2 Instance
+Ubuntu 24.04 LTS
+t2.micro (Free Tier)
+
+Create a new key pair:
+
+shopping2026-key.pem
+Download and keep this file safely.
+Why?
+
+This is your SSH key. It lets you log into your EC2 instance.
+
+2. Configure Security Group
+
+Allow inbound traffic:
+
+Type	Port
+SSH	22
+Custom TCP	8007
+
+Later, if using Nginx:
+
+Type	Port
+HTTP	80
+HTTPS	443
+Phase 2 — Connect to EC2
+
+On your Mac:
+
+chmod 400 shopping2026-key.pem
+
+Connect:
+
+ssh -i shopping2026-key.pem ubuntu@YOUR_PUBLIC_IP
+
+Example:
+
+ssh -i shopping2026-key.pem ubuntu@3.27.170.4
+Phase 3 — Install Docker
+
+Update packages:
+
+sudo apt update
+
+Install Docker:
+
+sudo apt install docker.io -y
+
+Enable Docker:
+
+sudo systemctl enable docker
+sudo systemctl start docker
+
+Verify:
+
+docker --version
+Phase 4 — Install Docker Compose
+
+Install:
+
+sudo apt install docker-compose-v2 -y
+
+Verify:
+
+docker compose version
+Phase 5 — Allow Docker Without sudo
+sudo usermod -aG docker ubuntu
+
+Then logout and SSH again.
+
+Phase 6 — Clone Project
+git clone <your-github-repo>
+
+Go inside:
+
+cd FullStack2026
+Phase 7 — Configure Backend Environment
+
+Create:
+
+backened/.env
+
+Add:
+
+DATABASE=...
+JWT_SECRET=...
+EMAIL_USER=...
+...
+
+Never push this file to GitHub.
+
+Phase 8 — Docker Compose
+
+Create:
+
+version: "3.9"
+
+services:
+  backend:
+    build: ./backened
+    ports:
+      - "8007:8007"
+    env_file:
+      - ./backened/.env
+
+  frontend:
+    build: ./frontened
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+Phase 9 — Build Containers
+docker compose up --build -d
+
+Docker now:
+
+Builds backend image
+Builds frontend image
+Starts both containers
+Phase 10 — Verify Containers
+docker ps
+
+You saw:
+
+backend Up
+frontend Up
+
+Meaning Docker deployment succeeded.
+
+Phase 11 — Verify Backend
+
+Inside EC2:
+
+curl http://localhost:8007/api/products
+
+You received products.
+
+Meaning:
+
+✅ Express running
+
+✅ MongoDB connected
+
+✅ API working
+
+Phase 12 — Verify Public Access
+
+Outside EC2:
+
+http://3.27.170.4:8007/api/products
+
+It also returned products.
+
+Meaning:
+
+✅ Security Group correct
+
+✅ Docker port mapping correct
+
+✅ Public deployment successful
+
+Phase 13 — Update Frontend
+
+Previously:
+
+export const BASE_URL =
+"https://fullstack2026.onrender.com/api";
+
+Changed to:
+
+export const BASE_URL =
+"http://3.27.170.4:8007/api";
+
+Works locally.
+
+Phase 14 — Deploy Frontend
+
+Push:
+
+git add .
+git commit -m "Updated backend URL"
+git push
+
+Netlify automatically redeployed.
+
+Phase 15 — Problem Encountered
+
+Netlify showed:
+
+Mixed Content
+
+Reason:
+
+Frontend:
+https://shopping2026.netlify.app
+
+↓
+
+Backend:
+http://3.27.170.4:8007
+
+Browsers block HTTPS → HTTP requests.
+
+Backend is working perfectly.
+
+This is purely a browser security restriction.
+
+Things You Learned
+shopping2026-key.pem
+
+Your SSH private key.
+
+Needed whenever you want to:
+
+SSH
+Update backend
+Install software
+Restart Docker
+
+Never upload it to GitHub.
+
+What is 3.27.170.4?
+
+Public IP of your EC2 instance.
+
+Browser:
+
+3.27.170.4
+
+↓
+
+EC2
+
+↓
+
+Docker
+
+↓
+
+Backend
+
+Why 8007?
+
+Because your backend listens on port 8007.
+
+8007:8007
+
+maps
+
+EC2 port → Docker port.
+
+Why Render worked immediately?
+
+Because Render provides:
+
+HTTPS
+Domain
+SSL
+Auto deployment
+
+Automatically.
+
+AWS gives you a raw Linux server.
+
+You configure everything yourself.
+
+How to update backend later
+
+After changing backend code:
+
+Local:
+
+git push
+
+SSH:
+
+ssh -i shopping2026-key.pem ubuntu@3.27.170.4
+
+Go to project:
+
+cd ~/FullStack2026
+
+Update:
+
+git pull
+
+Restart backend:
+
+docker compose up --build -d backend
+
+Done.
+
+Current Status
+Successfully Completed
+✅ AWS EC2
+✅ Ubuntu Server
+✅ SSH
+✅ Security Groups
+✅ Docker
+✅ Docker Compose
+✅ Git Clone
+✅ Environment Variables
+✅ Backend Deployment
+✅ MongoDB Connection
+✅ Public API
+✅ Frontend connected locally to EC2 backend
+Remaining (Optional)
+For production
+Elastic IP
+Domain
+Nginx
+HTTPS (Let's Encrypt)
+
+These solve the Mixed Content issue.
+
+For convenience
+GitHub Actions
+
+This removes the need to SSH and run:
+
+git pull
+docker compose up --build -d backend
+
+after every backend change.
